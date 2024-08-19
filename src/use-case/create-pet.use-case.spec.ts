@@ -1,19 +1,22 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { inMemoryCreatePetRepository } from "@/repositories/in-memory/in-memory-create-pet-repository";
+import { inMemoryPetsRepository } from "@/repositories/in-memory/in-memory-pets-repository";
 import { CreatePetUseCase } from "./create-pet.use-case";
 import { inMemoryOrgsRepository } from "@/repositories/in-memory/in-memory-repository";
+import { OrgNotFoundError } from "./errors/org-not-found.error";
 
 let orgsRepository: inMemoryOrgsRepository
-let petRepository: inMemoryCreatePetRepository
+let petsRepository: inMemoryPetsRepository
 let sut: CreatePetUseCase
 
 describe('Create Pet Use Case', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
         orgsRepository = new inMemoryOrgsRepository()
-        petRepository = new inMemoryCreatePetRepository()
-        sut = new CreatePetUseCase(petRepository)
+        petsRepository = new inMemoryPetsRepository(orgsRepository)
+        sut = new CreatePetUseCase(orgsRepository, petsRepository)
 
-        await orgsRepository.create({
+    })
+    it('Should be able to create a new pet', async () => {
+        const org = await orgsRepository.create({
             id: 'org-01',
             name: 'JavaScript Dogs',
             owners_name: 'John Doe',
@@ -27,8 +30,7 @@ describe('Create Pet Use Case', () => {
             latitude: -3.8613898,
             longitude: -38.582414,
         })
-    })
-    it('Should be able to create an pet registration', async () => {
+
         const { pet } = await sut.execute({
             name: 'Harry',
             about: 'Cachorro. Raça: mestiço, Cor: pardo',
@@ -36,10 +38,23 @@ describe('Create Pet Use Case', () => {
             size: 'pequeno',
             energy_level: 'enérgico',
             environment: 'Médio',
-            org_id: 'org-01',
+            org_id: org.id,
         })
+        expect(petsRepository.items).toHaveLength(1)
         expect(pet.id).toEqual(expect.any(String))
-        console.log(pet)
+    })
+
+    it('should not be able to create a new pet with no organization', async () => {
+        const pet = await petsRepository.create({
+            name: 'Harry',
+            about: 'Cachorro. Raça: mestiço, Cor: pardo',
+            age: '1 ano',
+            size: 'pequeno',
+            energy_level: 'enérgico',
+            environment: 'Médio',
+            org_id: 'non-existing-id',
+        })
+        expect(sut.execute(pet)).rejects.toBeInstanceOf(OrgNotFoundError)
     })
 
 })
