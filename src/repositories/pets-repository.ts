@@ -6,5 +6,6 @@ export interface FindByCityParams {
 
 export interface PetsRepository {
     findByCity(params: FindByCityParams): Promise<Pet[]>
+    findById(id: string): Promise<Pet | null>
     create(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
 }
