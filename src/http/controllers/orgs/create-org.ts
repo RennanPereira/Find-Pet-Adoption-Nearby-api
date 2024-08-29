@@ -1,6 +1,5 @@
 import { z } from 'Zod'
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { PrismaOrgsRepository } from '@/repositories/prisma-orgs-repository'
 import { OrgAlreadyExistsError } from '@/use-cases/errors/org-already-exists-error'
 import { CreateOrgUseCase } from '@/use-cases/create-org.use-case'
 import { makeCreateOrgUseCase } from '@/use-cases/factories/make-create-org.use-case'

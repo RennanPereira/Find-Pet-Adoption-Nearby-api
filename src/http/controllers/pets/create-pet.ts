@@ -11,7 +11,6 @@ export async function createPet(request: FastifyRequest, reply: FastifyReply) {
         size: z.string(),
         energy_level: z.string(),
         environment: z.string(),
-        org_id: z.string(),
     })
 
     const {
@@ -21,10 +20,11 @@ export async function createPet(request: FastifyRequest, reply: FastifyReply) {
         size,
         energy_level,
         environment,
-        org_id,
     } = createPetbodySchema.parse(request.body)
 
     const createPetUseCase = makeCreatePetUseCase()
+
+    const org_id = request.user.sub
 
     try {
 

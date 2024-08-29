@@ -3,6 +3,7 @@ import { CreateOrgUseCase } from "./create-org.use-case";
 import { inMemoryOrgsRepository } from "@/repositories/in-memory/in-memory-repository";
 import { compare } from "bcryptjs";
 import { OrgAlreadyExistsError } from "./errors/org-already-exists-error";
+import { makeOrg } from "tests/factories/make-org.factory";
 
 let orgsRepository: inMemoryOrgsRepository
 let sut: CreateOrgUseCase
@@ -13,76 +14,26 @@ describe('Create Org Use Case', () => {
         sut = new CreateOrgUseCase(orgsRepository)
     })
     it('Should be able to create an org', async () => {
-        const { org } = await sut.execute({
-            name: 'JavaScript Dogs',
-            owners_name: 'John Doe',
-            email: 'johndoe@exemple.com',
-            password: '123456',
-            whatsapp: '12213412341',
-            cep: '51423142',
-            state: 'Ceará',
-            city: 'Pajuçara',
-            street: 'Rua Paulo batista',
-            latitude: -3.8613898,
-            longitude: -38.582414,
-        })
+
+        const { org } = await sut.execute(makeOrg())
         expect(org.id).toEqual(expect.any(String))
     })
 
     it('Should hash password upon creation', async () => {
-        const { org } = await sut.execute({
-            name: 'JavaScript Dogs',
-            owners_name: 'John Doe',
-            email: 'johndoe@exemple.com',
-            password: '123456',
-            whatsapp: '12213412341',
-            cep: '51423142',
-            state: 'Ceará',
-            city: 'Pajuçara',
-            street: 'Rua Paulo batista',
-            latitude: -3.8613898,
-            longitude: -38.582414,
-        })
+        const password = '123456'
 
-        const isPasswordCorrectlyHashed = await compare(
-            '123456',
-            org.password_hash,
-        )
-        expect(isPasswordCorrectlyHashed).toBe(true)
+        const { org } = await sut.execute(makeOrg({ password }))
+        console.log(org.password)
+        expect(await compare(password, org.password)).toBe(true)
+        expect(await compare(password, orgsRepository.items[0].password)).toBe(true)
 
     })
 
     it('Should not be able to create org with same email', async () => {
         const email = 'jhondoe@exemple.com'
-
-        await sut.execute({
-            name: 'JavaScript Dogs',
-            owners_name: 'John Doe',
-            email,
-            password: '123456',
-            whatsapp: '12213412341',
-            cep: '51423142',
-            state: 'Ceará',
-            city: 'Pajuçara',
-            street: 'Rua Paulo batista',
-            latitude: -3.8613898,
-            longitude: -38.582414,
-        })
-
+        orgsRepository.create(makeOrg({ email }))
         await expect(() =>
-            sut.execute({
-                name: 'JavaScript Dogs',
-                owners_name: 'John Doe',
-                email,
-                password: '123456',
-                whatsapp: '12213412341',
-                cep: '51423142',
-                state: 'Ceará',
-                city: 'Pajuçara',
-                street: 'Rua Paulo batista',
-                latitude: -3.8613898,
-                longitude: -38.582414,
-            }),
+            sut.execute(makeOrg({ email }))
         ).rejects.toBeInstanceOf(OrgAlreadyExistsError)
     })
 })

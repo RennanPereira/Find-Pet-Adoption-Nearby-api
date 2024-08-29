@@ -49,7 +49,7 @@ export class CreateOrgUseCase {
             name,
             owners_name,
             email,
-            password_hash,
+            password: password_hash,
             whatsapp,
             cep,
             state,

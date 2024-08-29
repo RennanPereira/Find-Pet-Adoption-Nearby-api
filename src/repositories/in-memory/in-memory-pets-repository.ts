@@ -8,12 +8,18 @@ export class inMemoryPetsRepository implements PetsRepository {
 
     constructor(private orgsRepository: inMemoryOrgsRepository) { }
 
-    async findByCity(params: FindByCityParams): Promise<Pet[]> {
+    async findAll(params: FindByCityParams): Promise<Pet[]> {
         const orgsByCity = this.orgsRepository.items.filter(
             (org) => org.city === params.city,
         )
 
-        const pets = this.items.filter((item) => orgsByCity.some((org) => org.id === item.org_id))
+        const pets = this.items
+            .filter((item) => orgsByCity.some((org) => org.id === item.org_id))
+            .filter((item) => (params.age ? item.age === params.age : true))
+            .filter((item) => (params.size ? item.size === params.size : true))
+            .filter((item) => (params.energy_level ? item.energy_level === params.energy_level : true))
+            .filter((item) => (params.environment ? item.environment === params.environment : true))
+
         return pets
     }
 

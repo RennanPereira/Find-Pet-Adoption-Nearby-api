@@ -17,10 +17,21 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
     try {
         const sut = makeAuthenticateOrgUseCase()
 
-        await sut.execute({
+        const { org } = await sut.execute({
             email,
             password,
         })
+        const token = await reply.jwtSign(
+            {},
+            {
+                sign: {
+                    sub: org.id,
+                },
+            },
+        )
+
+        return reply.status(200).send({ token, })
+
     } catch (err) {
         if (err instanceof InvalidCredentialsError) {
             return reply.status(400).send({ message: err.message })
