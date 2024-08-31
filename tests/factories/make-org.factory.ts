@@ -1,5 +1,5 @@
 import { faker, fakerLV } from "@faker-js/faker"
-import { randomUUID } from "crypto"
+import crypto from "node:crypto"
 
 type Overwrite = {
     password?: string
@@ -8,7 +8,7 @@ type Overwrite = {
 
 export function makeOrg(overwrite?: Overwrite) {
     return {
-        id: randomUUID(),
+        id: crypto.randomUUID(),
         name: faker.company.name(),
         owners_name: faker.person.fullName(),
         email: overwrite?.email ?? faker.internet.email(),

@@ -4,7 +4,7 @@ import { makeOrg } from 'tests/factories/make-org.factory'
 import { makePet } from 'tests/factories/make-pet.factory'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-describe('Create pet (e2e)', () => {
+describe('Get pet (e2e)', () => {
 
     beforeAll(async () => {
         await app.ready()
@@ -14,7 +14,7 @@ describe('Create pet (e2e)', () => {
         await app.close()
     })
 
-    it('should be able to create a new pet', async () => {
+    it('should be able to get a new pet', async () => {
         const org = makeOrg()
 
         await request(app.server).post('/orgs').send(org)
@@ -27,6 +27,11 @@ describe('Create pet (e2e)', () => {
             .post('/orgs/pets')
             .set('Authorization', `Bearer ${authResponse.body.token}`)
             .send(makePet())
-        expect(response.status).toBe(201)
+
+        const getPetResponse = await request(app.server)
+            .get(`/orgs/pets/${response.body.id}`)
+            .set('Authrization', `Bearer ${authResponse.body.token}`)
+
+        expect(getPetResponse.status).toBe(200)
     })
 })

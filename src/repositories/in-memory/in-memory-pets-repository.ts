@@ -1,6 +1,6 @@
 import { Pet, Prisma } from "@prisma/client";
 import { randomUUID } from "crypto";
-import { FindByCityParams, PetsRepository } from "../pets-repository";
+import { FindAllParams, PetsRepository } from "../pets-repository";
 import { inMemoryOrgsRepository } from "./in-memory-repository";
 
 export class inMemoryPetsRepository implements PetsRepository {
@@ -8,7 +8,7 @@ export class inMemoryPetsRepository implements PetsRepository {
 
     constructor(private orgsRepository: inMemoryOrgsRepository) { }
 
-    async findAll(params: FindByCityParams): Promise<Pet[]> {
+    async findAll(params: FindAllParams): Promise<Pet[]> {
         const orgsByCity = this.orgsRepository.items.filter(
             (org) => org.city === params.city,
         )

@@ -15,7 +15,7 @@ describe('Get Pet Use Case', () => {
 
     })
     it('Should be able to get a pet', async () => {
-        const createdPet = await petsRepository.create({
+        const createPet = await petsRepository.create({
             name: 'Harry',
             about: 'Cachorro. Raça: mestiço, Cor: pardo',
             age: '1 ano',
@@ -26,7 +26,7 @@ describe('Get Pet Use Case', () => {
         })
 
         const { pet } = await sut.execute({
-            id: createdPet.id,
+            id: createPet.id,
         })
 
         expect(pet.id).toEqual(expect.any(String))

@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { Prisma, Org, Pet } from '@prisma/client'
-import { FindByCityParams, PetsRepository } from './pets-repository'
+import { FindAllParams, PetsRepository } from '../pets-repository'
 
 export class PrismaPetsRepository implements PetsRepository {
     async create(data: Prisma.PetUncheckedCreateInput): Promise<Pet> {
@@ -11,12 +11,18 @@ export class PrismaPetsRepository implements PetsRepository {
         return pet
     }
 
-    async findAll(params: FindByCityParams): Promise<Pet[]> {
+    async findAll(params: FindAllParams): Promise<Pet[]> {
         const pets = await prisma.pet.findMany({
             where: {
-                org_id: {
-                    contains: params.city,
-                }
+                age: params.age,
+                size: params.size,
+                energy_level: params.energy_level,
+                environment: params.environment,
+                org: {
+                    city: {
+                        contains: params.city,
+                    },
+                },
             },
         })
         return pets

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { inMemoryOrgsRepository } from "@/repositories/in-memory/in-memory-repository";
-import { AuthenticateUseCase } from "./authenticate";
+import { AuthenticateUseCase } from "./authenticate-org.use-case";
 import { hash } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
 

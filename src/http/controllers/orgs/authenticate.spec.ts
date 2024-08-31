@@ -24,5 +24,6 @@ describe('Authenticate org (e2e)', () => {
         })
 
         expect(response.status).toBe(200)
+        expect(response.body.token).toEqual(expect.any(String))
     })
 })
