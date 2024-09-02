@@ -26,7 +26,7 @@ describe('Fetch Nearby Orgs (e2e)', () => {
             .send({ email: org.email, password: org.password })
 
         const response = await request(app.server)
-            .get('/orgs/fetch')
+            .get('/orgs/nearby')
             .query({
                 latitude: -3.8535462,
                 longitude: -38.5795397,

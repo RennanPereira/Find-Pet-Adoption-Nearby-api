@@ -4,8 +4,8 @@ import crypto from "node:crypto"
 type Overwrite = {
     password?: string
     email?: string
-    latitude: number
-    longitude: number
+    latitude?: number
+    longitude?: number
 }
 
 export function makeOrg(overwrite?: Overwrite) {

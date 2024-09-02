@@ -3,6 +3,7 @@ import { inMemoryOrgsRepository } from "@/repositories/in-memory/in-memory-repos
 import { AuthenticateUseCase } from "./authenticate-org.use-case";
 import { hash } from "bcryptjs";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
+import { makeOrg } from "tests/factories/make-org.factory";
 
 let orgsRepository: inMemoryOrgsRepository
 let sut: AuthenticateUseCase
@@ -12,7 +13,8 @@ describe('Authenticate Org Use Case', () => {
         orgsRepository = new inMemoryOrgsRepository()
         sut = new AuthenticateUseCase(orgsRepository)
     })
-    it('Should be able to authenticate', async () => {
+    it('Should be able to authenticate an org', async () => {
+
         await orgsRepository.create({
             name: 'JavaScript Dogs',
             owners_name: 'John Doe',
@@ -32,6 +34,28 @@ describe('Authenticate Org Use Case', () => {
             password: '123456',
         })
         expect(org.id).toEqual(expect.any(String))
+    })
+    it('Should not able to authenticate with wrong email', async () => {
+        await orgsRepository.create({
+            name: 'JavaScript Dogs',
+            owners_name: 'John Doe',
+            email: 'johndoe@exemple.com',
+            password: await hash('123456', 6),
+            whatsapp: '12213412341',
+            cep: '51423142',
+            state: 'Ceará',
+            city: 'Pajuçara',
+            street: 'Rua Paulo batista',
+            latitude: -3.8613898,
+            longitude: -38.582414,
+        })
+
+        expect(() =>
+            sut.execute({
+                email: 'wrong@exemple.com',
+                password: '123456',
+            }),
+        ).rejects.toBeInstanceOf(InvalidCredentialsError)
     })
 
     it('Should not able to authenticate with wrong password', async () => {
