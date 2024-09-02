@@ -1,12 +1,12 @@
 import { Org, Prisma } from '@prisma/client'
 
-export interface findManyNearbyParams {
+export interface FindManyNearbyParams {
   latitude: number
   longitude: number
 }
 export interface OrgsRepository {
   findById(id: string): Promise<Org | null>
   findByEmail(email: string): Promise<Org | null>
-  findManyNearby(params: findManyNearbyParams): Promise<Org[]>
+  findManyNearby(params: FindManyNearbyParams): Promise<Org[]>
   create(data: Prisma.OrgCreateInput): Promise<Org>
 }
