@@ -19,7 +19,6 @@ describe('Fetch Nearby Orgs (e2e)', () => {
         const org2 = makeOrg({ latitude: -3.7117419, longitude: -38.5836401 })
 
         await request(app.server).post('/orgs').send(org)
-        console.log(org, org2)
 
         const authResponse = await request(app.server)
             .post('/orgs/authenticate')

@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { hash } from 'bcryptjs'
 import { OrgAlreadyExistsError } from './errors/org-already-exists-error'
 import { Org } from '@prisma/client'
+import { OrgsRepository } from '@/repositories/orgs-repository'
 
 interface CreateOrgUseCaseRequest {
     name: string
@@ -22,7 +23,7 @@ interface CreateOrgUseCaseResponse {
 }
 
 export class CreateOrgUseCase {
-    constructor(private orgsRepository: any) { }
+    constructor(private orgsRepository: OrgsRepository) { }
 
     async execute({
         name,

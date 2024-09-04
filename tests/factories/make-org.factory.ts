@@ -6,6 +6,7 @@ type Overwrite = {
     email?: string
     latitude?: number
     longitude?: number
+    whatsapp?: string
 }
 
 export function makeOrg(overwrite?: Overwrite) {
@@ -15,7 +16,7 @@ export function makeOrg(overwrite?: Overwrite) {
         owners_name: faker.person.fullName(),
         email: overwrite?.email ?? faker.internet.email(),
         password: overwrite?.password ?? faker.internet.password(),
-        whatsapp: faker.phone.number(),
+        whatsapp: overwrite?.whatsapp ?? faker.phone.number(),
         cep: faker.location.zipCode(),
         state: faker.location.state(),
         city: faker.location.city(),

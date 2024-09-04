@@ -7,5 +7,4 @@ export async function orgsRoutes(app: FastifyInstance) {
   app.post('/orgs', createOrg)
   app.post('/orgs/authenticate', authenticate)
   app.get('/orgs/nearby', fetchNearbyOrgs)
-
 }

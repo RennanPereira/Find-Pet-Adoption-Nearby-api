@@ -23,7 +23,7 @@ describe('Create Org Use Case', () => {
         const password = '123456'
 
         const { org } = await sut.execute(makeOrg({ password }))
-        console.log(org.password)
+
         expect(await compare(password, org.password)).toBe(true)
         expect(await compare(password, orgsRepository.items[0].password)).toBe(true)
 
