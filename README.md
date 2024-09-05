@@ -57,7 +57,7 @@ API desenvolvida para registrar/buscar organizações, especializada em adoção
   npm i
 
 # Criar arquivo '.env' na raiz do projeto;
-  On term:  cp .env.exemple .env
+  cp .env.exemple .env
 
 # Criar Container no Docker usando os dados do arquivo docker-compose.yml;
 
