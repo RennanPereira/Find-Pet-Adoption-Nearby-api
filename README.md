@@ -51,7 +51,7 @@ API desenvolvida para registrar/buscar organizações, especializada em adoção
 
 ```bash
 # Faça o clone do repotório;
-  gh repo clone RennanPereira/Find-Pet-Adoption-Nearby-API
+  gh repo clone RennanPereira/Find-Pet-Adoption-Nearby-api
 
 # Instalar as dependências do projeto;
   npm i
